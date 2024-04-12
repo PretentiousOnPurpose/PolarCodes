@@ -42,6 +42,11 @@ vector<int> KroneckerKernel(int N) {
     // Super lazy way of performing Kronecker Product. Maybe ChatGPT can do better?
 
     vector<int> ker1 = arikanKernel();
+
+    if (N == 0) {
+        return ker1;
+    }
+
     vector<int> ker2 = arikanKernel();
     vector<int> kronKer;
     int tmpRowDim;
