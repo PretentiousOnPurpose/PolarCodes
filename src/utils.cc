@@ -4,12 +4,19 @@
 #include <cmath>
 #include <time.h>
 #include <vector>
+#include <numeric>
 #include "utils.hpp"
 using namespace std;
 
-// vector<int> fastMatMul(vector<int> ker, vector<int> data, int dim) {
+vector<int> fastMatMul(vector<int> ker, vector<int> data, int dim) {
+    vector<int> codeword;
 
-// }
+    for (int iter_n = 0; iter_n < dim; iter_n++) {
+        codeword.push_back(inner_product(&ker[iter_n * dim], &ker[(iter_n + 1) * dim], &data[0], 0) % 2);
+    }
+
+    return codeword;
+}
 
 void displayArr(vector<int> mat, int dim) {
 
