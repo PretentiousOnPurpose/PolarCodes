@@ -5,17 +5,18 @@
 #include <time.h>
 #include <vector>
 #include <numeric>
+#include <random>
 #include "utils.hpp"
 using namespace std;
 
 vector<int> fastMatMul(vector<int> ker, vector<int> data, int dim) {
-    vector<int> codeword;
+    vector<int> cwd;
 
     for (int iter_n = 0; iter_n < dim; iter_n++) {
-        codeword.push_back(inner_product(&ker[iter_n * dim], &ker[(iter_n + 1) * dim], &data[0], 0) % 2);
+        cwd.push_back(inner_product(&ker[iter_n * dim], &ker[(iter_n + 1) * dim], &data[0], 0) % 2);
     }
 
-    return codeword;
+    return cwd;
 }
 
 void displayArr(vector<int> mat, int dim) {
@@ -39,7 +40,7 @@ void displayMat(vector<int> mat, int dimRow, int dimCol) {
 }
 
 vector<int> KroneckerKernel(int N) {
-    // Super lazy way of performing Kronecker Product. Maybe ChatGPT can do better?
+    // My super lazy way of performing Kronecker Product. Maybe ChatGPT can do better?
 
     vector<int> ker1 = arikanKernel();
 
@@ -60,8 +61,8 @@ vector<int> KroneckerKernel(int N) {
                 if (ker1[iter_row * (int)tmpRowDim / 2 + iter_col] == 1) {
                     tmpKer[iter_row * 2 * tmpRowDim + iter_col * 2] = ker2[0];
                     tmpKer[iter_row * 2 * tmpRowDim + iter_col * 2 + 1] = ker2[1];
-                    tmpKer[iter_row * 2 * tmpRowDim + tmpRowDim + iter_col * 2] = ker2[2];
-                    tmpKer[iter_row * 2 * tmpRowDim + tmpRowDim + iter_col * 2 + 1] = ker2[3];
+                    tmpKer[(iter_row * 2 + 1) * tmpRowDim + iter_col * 2] = ker2[2];
+                    tmpKer[(iter_row * 2 + 1) * tmpRowDim + iter_col * 2 + 1] = ker2[3];
                 }
             }
         }
@@ -96,4 +97,26 @@ vector<int> arikanKernel() {
     ker.push_back(1);
 
     return ker;
+}
+
+vector<int> BPSK_modulation(vector<int> cwd, int dim) {
+    vector<int> modData(dim, 0);
+
+    for (int iter_n = 0; iter_n < dim; iter_n++) {
+        modData[iter_n] = 1 - 2 * cwd[iter_n];
+    }
+
+    return modData;
+}
+
+vector<int> AWGN(vector<int> data, int dim, double noiseVar) {
+    random_device rd;
+    mt19937 gen(rd());
+    normal_distribution<float> noiseDist(0, 1);
+
+    for (int iter_n = 0; iter_n < dim; iter_n++) {
+        data[iter_n] = data[iter_n] + sqrt(noiseVar) * noiseDist(gen);
+    }
+
+    return data;
 }
