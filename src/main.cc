@@ -3,8 +3,8 @@
 using namespace std;
 
 int main() {
-    int * kronKer = KroneckerKernel(3);
-    displayMat(kronKer, 16, 16);
+    int * data = randomDataBits(30);
+    displayArr(data, 30);
 
     return 0;
 }

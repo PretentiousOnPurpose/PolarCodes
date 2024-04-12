@@ -2,8 +2,22 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <cmath>
+#include <time.h>
 #include "utils.hpp"
 using namespace std;
+
+// int * fastMatMul(int * ker, int * data, int dim) {
+
+// }
+
+void displayArr(int * mat, int dim) {
+
+    for (int iter_r = 0; iter_r < dim; iter_r++) {
+        cout << mat[iter_r] << " ";            
+    }
+
+    cout << endl;
+}
 
 void displayMat(int * mat, int dimRow, int dimCol) {
     int numel = dimCol * dimRow;
@@ -48,10 +62,11 @@ int * KroneckerKernel(int N) {
 }
 
 int * randomDataBits(int N) {
+    srand(time(NULL));
     int * data = (int *)calloc(N, sizeof(int));
 
     for (int iter_n = 0; iter_n < N; iter_n++) {
-        data[iter_n] = rand() > 0.5 ? 1: 0; 
+        data[iter_n] = (int)(rand() * 100 / RAND_MAX) > 50 ? 1: 0; 
     }
 
     return data;

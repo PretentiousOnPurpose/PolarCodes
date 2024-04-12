@@ -1,7 +1,8 @@
 #include <stdlib.h>
 
+void displayArr(int * mat, int dim);
 void displayMat(int * mat, int dimRow, int dimCol);
-int * KroneckerKernel(int N);
-int * fastMatMul(int ** ker, int * data);
-int * randomDataBits(int N);
+int * KroneckerKernel(int dim);
+int * fastMatMul(int * ker, int * data, int dim);
+int * randomDataBits(int dim);
 int * arikanKernel();
