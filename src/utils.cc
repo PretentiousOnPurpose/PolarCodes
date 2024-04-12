@@ -3,14 +3,15 @@
 #include <stdlib.h>
 #include <cmath>
 #include <time.h>
+#include <vector>
 #include "utils.hpp"
 using namespace std;
 
-// int * fastMatMul(int * ker, int * data, int dim) {
+// vector<int> fastMatMul(vector<int> ker, vector<int> data, int dim) {
 
 // }
 
-void displayArr(int * mat, int dim) {
+void displayArr(vector<int> mat, int dim) {
 
     for (int iter_r = 0; iter_r < dim; iter_r++) {
         cout << mat[iter_r] << " ";            
@@ -19,7 +20,7 @@ void displayArr(int * mat, int dim) {
     cout << endl;
 }
 
-void displayMat(int * mat, int dimRow, int dimCol) {
+void displayMat(vector<int> mat, int dimRow, int dimCol) {
     int numel = dimCol * dimRow;
 
     for (int iter_r = 0; iter_r < dimRow; iter_r++) {
@@ -30,18 +31,17 @@ void displayMat(int * mat, int dimRow, int dimCol) {
     }
 }
 
-int * KroneckerKernel(int N) {
+vector<int> KroneckerKernel(int N) {
     // Super lazy way of performing Kronecker Product. Maybe ChatGPT can do better?
 
-    int * ker1 = arikanKernel();
-    int * ker2 = arikanKernel();
-    int * kronKer = nullptr;
-    int * tmpKer = nullptr;
+    vector<int> ker1 = arikanKernel();
+    vector<int> ker2 = arikanKernel();
+    vector<int> kronKer;
     int tmpRowDim;
 
     for (int iter_n = 1; iter_n <= N; iter_n++) {
         tmpRowDim = sqrt(pow(4, iter_n + 1));
-        tmpKer = (int *)calloc(tmpRowDim * tmpRowDim, sizeof(int));
+        vector<int> tmpKer(tmpRowDim * tmpRowDim, 0);
 
         for (int iter_row = 0; iter_row < (int)tmpRowDim / 2; iter_row++) {
             for (int iter_col = 0; iter_col < (int)tmpRowDim / 2; iter_col++) {
@@ -55,34 +55,33 @@ int * KroneckerKernel(int N) {
         }
 
         ker1 = tmpKer;
-        tmpKer = nullptr;
     }
 
     return ker1;
 }
 
-int * randomDataBits(int N) {
+vector<int> randomDataBits(int N) {
     srand(time(NULL));
-    int * data = (int *)calloc(N, sizeof(int));
+    vector<int> data;
 
     for (int iter_n = 0; iter_n < N; iter_n++) {
-        data[iter_n] = (int)(rand() * 100 / RAND_MAX) > 50 ? 1: 0; 
+        data.push_back((int)(rand() * 100 / RAND_MAX) > 50 ? 1: 0); 
     }
 
     return data;
 }
 
-int * arikanKernel() {
-    int * ker = (int *)calloc(4, sizeof(int));
+vector<int> arikanKernel() {
+    vector<int> ker;
     
     // Constructing the Arikan Kernel
     // X = [[1 1]
     //      [0 1]]
 
-    ker[0] = 1;
-    ker[1] = 1;
-    ker[2] = 0;
-    ker[3] = 1;
+    ker.push_back(1);
+    ker.push_back(1);
+    ker.push_back(0);
+    ker.push_back(1);
 
     return ker;
 }
