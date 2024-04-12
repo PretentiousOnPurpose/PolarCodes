@@ -19,6 +19,15 @@ vector<int> fastMatMul(vector<int> ker, vector<int> data, int dim) {
     return cwd;
 }
 
+void displayArr(vector<double> mat, int dim) {
+
+    for (int iter_r = 0; iter_r < dim; iter_r++) {
+        cout << mat[iter_r] << " ";            
+    }
+
+    cout << endl;
+}
+
 void displayArr(vector<int> mat, int dim) {
 
     for (int iter_r = 0; iter_r < dim; iter_r++) {
@@ -109,14 +118,26 @@ vector<int> BPSK_modulation(vector<int> cwd, int dim) {
     return modData;
 }
 
-vector<int> AWGN(vector<int> data, int dim, double noiseVar) {
+vector<double> AWGN(vector<int> data, int dim, double noiseVar) {
     random_device rd;
     mt19937 gen(rd());
     normal_distribution<float> noiseDist(0, 1);
 
+    vector<double> corr_sig(dim, 0.0);
+
     for (int iter_n = 0; iter_n < dim; iter_n++) {
-        data[iter_n] = data[iter_n] + sqrt(noiseVar) * noiseDist(gen);
+        corr_sig[iter_n] = data[iter_n] + sqrt(noiseVar) * noiseDist(gen);
     }
 
-    return data;
+    return corr_sig;
+}
+
+vector<double> BPSK_logLLR(vector<double> corr_sig, int dim, double noiseVar) {
+    vector<double> logLLR(dim, 0);
+
+    for (int iter_n = 0; iter_n < dim; iter_n++) {
+        logLLR[iter_n] = (corr_sig[iter_n] * corr_sig[iter_n] - (corr_sig[iter_n] - 1) * (corr_sig[iter_n] - 1)) / noiseVar;
+    }
+
+    return logLLR;
 }

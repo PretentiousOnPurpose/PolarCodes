@@ -5,14 +5,21 @@ using namespace std;
 
 int main() {
     vector<int> data = randomDataBits(4);
-    vector<int> kronKer = KroneckerKernel(1);
-    vector<int> cwd = fastMatMul(kronKer, data, 4);
+    vector<int> modData = BPSK_modulation(data, 4);
+
+    double noiseVar = 0.0001;
+
+    vector<double> corr_sig = AWGN(modData, 4, noiseVar);
+    vector<double> logLLR = BPSK_logLLR(corr_sig, 4, noiseVar);
 
     displayArr(data, 4);
     cout << endl;
-    displayMat(kronKer, 4, 4);
+    displayArr(modData, 4);
     cout << endl;
-    displayArr(cwd, 4);
-
+    displayArr(corr_sig, 4);
+    cout << endl;
+    displayArr(logLLR, 4);
+    cout << endl;
+    
     return 0;
 }
