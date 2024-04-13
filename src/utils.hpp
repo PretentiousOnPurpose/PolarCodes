@@ -12,3 +12,5 @@ vector<int> arikanKernel();
 vector<double> BPSK_logLLR(vector<double> corr_sig, int dim, double noiseVar);
 vector<double> AWGN(vector<int> data, int dim, double noiseVar);
 vector<int> BPSK_modulation(vector<int> cwd, int dim);
+vector<int> BEC(vector<int> data, int dim, double erasureProb);
+vector<int> BSC(vector<int> data, int dim, double flipProb);

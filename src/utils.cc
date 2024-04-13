@@ -141,3 +141,33 @@ vector<double> BPSK_logLLR(vector<double> corr_sig, int dim, double noiseVar) {
 
     return logLLR;
 }
+
+vector<int> BEC(vector<int> data, int dim, double erasureProb) {
+    srand(time(NULL));
+    vector<int> corr_sig(dim, 0);
+
+    for (int iter_n = 0; iter_n < dim; iter_n++) {
+        if ((int)(rand() * 100 / RAND_MAX) <= (1 - erasureProb) * 100 ? 1: 0) {
+            corr_sig[iter_n] = data[iter_n];
+        } else {
+            corr_sig[iter_n] = -10; // representing Erasure
+        }
+    }
+
+    return corr_sig;
+}
+
+vector<int> BSC(vector<int> data, int dim, double flipProb) {
+    srand(time(NULL));
+    vector<int> corr_sig(dim, 0);
+
+    for (int iter_n = 0; iter_n < dim; iter_n++) {
+        if ((int)(rand() * 100 / RAND_MAX) <= (1 - flipProb) * 100 ? 1: 0) {
+            corr_sig[iter_n] = data[iter_n];
+        } else {
+            corr_sig[iter_n] = -1 * data[iter_n]; // representing Erasure
+        }
+    }
+
+    return corr_sig;
+}
